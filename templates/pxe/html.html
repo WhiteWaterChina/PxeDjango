@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pxe Web!</title>
+</head>
+<body>
+<h1>PXE 自动安装OS配置界面</h1>
+<form action="{% url 'pxe:get_os_version' %}" method="post">
+{% csrf_token %}
+<select id="os_type" name="os_type" title="os_type" style="width:100px;">
+    {% for item_os_type in os_type_list %}
+        <option name="{{ item_os_type }}">{{ item_os_type }}</option>
+    {% endfor %}
+</select>
+<select name="os_version" id="os_verison" title="os_version" style="width:100px;">
+    {% for item_ver in os_version_list %}
+        <option value={{ item_ver }}>{{ item_ver }}</option>
+    {% endfor %}
+</select>
+{% block os_version %}
+{% endblock %}
+<input type="submit" value="选择OS版本" />
+</form>
+</body>
+</html>
