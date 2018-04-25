@@ -1,26 +1,146 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Pxe Web!</title>
+    <link rel="stylesheet" href="{% static 'pxe/css/PxeStyle.css' %}">
 </head>
-<body>
-<h1>PXE 自动安装OS配置界面</h1>
+
+
+
+<body style="background-color: green; width: 100%; height: 100%;">
+
+<div id="message">
+{% if messages %}
+<ul class="messages" style="background-color: red; align-content: center">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if messages_error_going %}
+<ul class="messages" style="background-color: red; align-content: center">
+    {% for message in messages_error_going %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+</div>
+<div id="main" style="width: 100%;  height: 100%">
+<div id="title"><h1 style="text-align: center">PXE 自动安装OS配置界面</h1></div>
+<!生成KS>
+<div id="gen_ks" style="float: left; width: 40%; border: 2px solid;">
+<div id="title"><h3 style="text-align: center">生成KS文件</h3></div>
 <form action="{% url 'pxe:get_os_version' %}" method="post">
+
 {% csrf_token %}
-<select id="os_type" name="os_type" title="os_type" style="width:100px;">
+
+<!OS种类>
+<p class="label_title" style="background-color: yellow; color: red; width: 100%;" id="show_os_type_info">请在如下选择要安装的系统类型，然后点击选择“OS版本”按钮</p> <br />
+<label class="label_item">选择系统类型：</label>
+<select id="os_type" name="os_type" title="os_type" style="width: 100px">
     {% for item_os_type in os_type_list %}
         <option name="{{ item_os_type }}">{{ item_os_type }}</option>
     {% endfor %}
 </select>
-<select name="os_version" id="os_verison" title="os_version" style="width:100px;">
+<input type="submit" title="gen_os_ver" id="gen_os_ver" name="gen_os_ver" value="选择OS版本" />
+<label style="color: red; background-color: #003366">只需要生成KS时选择</label>
+<br />
+
+<!OS版本>
+<p class="label_title" style="background-color: yellow; color: red; width: 100%;">选择OS版本、BIOS模式、系统位数</p> <br />
+<label class="label_item">请选择系统版本：</label>
+<select name="os_version" id="os_verison" title="os_version" style="width: 150px; height: 20px;">
     {% for item_ver in os_version_list %}
         <option value={{ item_ver }}>{{ item_ver }}</option>
     {% endfor %}
 </select>
-{% block os_version %}
-{% endblock %}
-<input type="submit" value="选择OS版本" />
+<label style="color: red; background-color: #003366">只需要生成KS时选择</label>
+<br />
+
+<!BIOS模式>
+<label class="label_item">请选择BIOS模式：</label>
+<select name="bios_mode" id="bios_mode" title="bios_mode" style="width: 145px;">
+    {% for item_ver in bios_mode_list %}
+        <option value={{ item_ver }}>{{ item_ver }}</option>
+    {% endfor %}
+</select>
+<label style="color: red; background-color: #003366">生成和删除KS都必须选择</label>
+<br />
+
+<!OS位数>
+<label class="label_item">请选择OS位数：</label>
+<select name="os_bit" id="os_bit" title="os_bit" style="width: 160px;">
+    {% for item_ver in os_bit_list %}
+        <option value={{ item_ver }}>{{ item_ver }}</option>
+    {% endfor %}
+</select>
+<label style="color: red; background-color: #003366">只需要生成KS时选择</label>
+<br />
+<p class="label_title" style="background-color: yellow; color: red; width: 100%;">请选择系统盘盘符，Windows系统无需更改，其他系统请更改至需要的盘符。</p> <br />
+<!系统盘符>
+<label class="label_item">请选择系统盘：</label>
+<select name="sys_disk_name" id="sys_disk_name" title="sys_disk_name" style="width: 160px">
+    {% for item_ver in sys_disk_name_list %}
+        <option value={{ item_ver }}>{{ item_ver }}</option>
+    {% endfor %}
+</select>
+<label style="color: red; background-color: #003366">只需要生成KS时选择</label>
+<br />
+<p class="label_title" style="background-color: yellow; color: red; width: 100%;">请在如下输入需要PXE安装操作系统的网口的MAC地址，格式为6c-92-bf-4c-77-90(大小写无所谓，但是"-"一定要有)</p> <br />
+<!MAC地址>
+<label class="label_item">请输入MAC地址：</label>
+<input name="mac_add" id="mac_add" title="mac_add" value="{{ mac_add }}" style="line-height: 10px">
+<label style="color: red; background-color: #003366">生成和删除KS都必须选择</label>
+<br />
+
+<p class="label_title">如果需要PXE启动，请选择“产生KS文件”按钮，PXE启动以上指定OS永久有效! 如果需要取消永久有效，请在开始安装系统后选择“删除KS文件“按钮</p> <br />
+
+<input type="submit" title="gen_ks" id="gen_ks" name="gen_ks" value="生成KS文件" style="width: 40%">
+<input type="submit" title="del_ks" id="del_ks" name="del_ks" value="删除KS文件" style="width: 40%">
+
 </form>
+
+<form action="{% url 'pxe:index' %}" method="post">
+{% csrf_token %}
+    <input type="submit" title="back_home" id="back_home" name="back_home" value="返回首页重新配置" style="width: 90%">
+</form>
+</div>
+<!查询IP和MAC地址对应关系>
+<div id="get_ip" style="float: left;width: 25%; border: 2px solid;">
+    <div id="title"><h3 style="text-align: center">查询MAC地址和IP对应关系</h3></div>
+    <p class="label_title" style="background-color: yellow; color: red; width: 100%;">可以在如下输入IP或者MAC地址搜索对应的MAC或者IP地址。IP地址格式为1.1.1.1；MAC地址格式为6c-92-bf-4c-77-90或者6c:92:bf:4c:77:90,不区分大小写</p>
+    <form action="{% url 'pxe:search' %}" method="post">
+        {% csrf_token %}
+        <input title="search_input" id="search_input" name="search_input" value="" style="height: 20px;width: 70%">
+        <input type="submit" value="Search" name="search" title="search" id="search" style="height: 25px; width: 20%">
+        <div><p class="label_title" style="background-color: yellow; color: red; width: 70%;">点击如下按钮查看所有的IP和MAC地址对应关系</p></div>
+        <div><input type="submit" name="view_all" title="view_all" id="view_all" value="View All" style="height: 25px; width: 70%"></div>
+
+        </form>
+    <div>
+        <textarea name="show_ip_mac" title="show_ip_mac" style="width: 90%;height: 300px" readonly wrap="hard" >{{ ip_mac_string }}</textarea>
+    </div>
+</div>
+
+<!设置PXE启动>
+<div id="set_pxe_reboot" style="float: left;width: 30%; border: 2px solid;">
+        <div id="title"><h3 style="text-align: center">设置PXE启动</h3></div>
+<p class="label_title" style="background-color: yellow; color: red; width: 100%;">请在如下然后输入MAC地址,格式为6c-92-bf-4c-77-90。按“设置PXE启动按钮”</p> <br />
+
+<form action="{% url 'pxe:set_pxe_reboot' %}" method="post">
+{% csrf_token %}
+
+    <label>BMC USERNAME：</label><input name="bmc_user" id="bmc_user" title="bmc_user" value=""><br>
+    <label>BMC PASSWORD：</label><input name="bmc_passwd" id="bmc_passwd" title="bmc_passwd" value=""><br>
+    <label>BMC IP：</label><input name="bmc_ip" id="bmc_ip" title="bmc_ip" value=""><br>
+    <input type="submit" name="set_pxe" id="set_pxe" title="set_pxe" value="设置PXE启动">
+</form>
+
+</div>
+</div>
 </body>
 </html>

@@ -1,9 +1,0 @@
-{% extends "pxe/html.html" %}
- 
-{% block os_verion %}
-<select name="os_version" id="os_verison" title="os_version">
-    {% for item_ver in os_version_list %}
-        <option value={{ item_ver }}>{{ item_ver }}</option>
-    {% endfor %}
-</select>
-{% endblock %}

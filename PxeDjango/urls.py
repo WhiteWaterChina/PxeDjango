@@ -19,5 +19,5 @@ from django.urls import include, path, re_path
 
 urlpatterns = [
     path(r'^admin/', admin.site.urls),
-    path('pxe/', include('pxe.urls')),
+    path('', include('pxe.urls')),
 ]
