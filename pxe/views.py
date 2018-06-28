@@ -63,13 +63,13 @@ def generate_menu_redhat(os_version_sub, os_sub_version_max_sub, os_sub_version_
         elif os_sub_version_max_sub == "6":
             if os_sub_version_min_sub == "9" or os_sub_version_min_sub == "8" or os_sub_version_min_sub == "7":
                 string_to_write.append(
-                    "kernel http://{ipaddress_dhcp}/images-uefi/{os_version}/{os_version}{os_sub_version_max}-{os_sub_version_min}_{os_bit}/vmlinuz initrd=initrd.img ramdisk_size=8192 dd=http://{ipaddress_dhcp}/driver/kmod-megaraid_sas-07.705.02.00_el{os_sub_version_max}.{os_sub_version_min}-1.x86_64.rpm dd=http://{ipaddress_dhcp}/driver/kmod-mpt3sas-24.00.00.00_el{os_sub_version_max}.{os_sub_version_min}-1.x86_64.rpm ip=dhcp ks=http://{ipaddress_dhcp}/ks/ks_all/{mac_net_pxe}.cfg ksdevice={mac_boot_device_rhel6}".format(
+                    "kernel http://{ipaddress_dhcp}/images-uefi/{os_version}/{os_version}{os_sub_version_max}-{os_sub_version_min}_{os_bit}/vmlinuz initrd=initrd.img ramdisk_size=8192 dd=http://{ipaddress_dhcp}/driver/megaraid_sas-07.705.02.00_el{os_sub_version_max}.{os_sub_version_min}-1.x86_64.iso/dd.iso  ip=dhcp ks=http://{ipaddress_dhcp}/ks/ks_all/{mac_net_pxe}.cfg ksdevice={mac_boot_device_rhel6}".format(
                         os_version=os_version_sub, os_sub_version_max=os_sub_version_max_sub,
                         os_sub_version_min=os_sub_version_min_sub, os_bit=os_bit_sub, ipaddress_dhcp=ipaddress_dhcp_sub,
                         mac_net_pxe=mac_net_pxe_sub, mac_boot_device_rhel6=mac_boot_device_rhel6_sub) + os.linesep)
             elif os_sub_version_min_sub == "6":
                 string_to_write.append(
-                    "kernel http://{ipaddress_dhcp}/images-uefi/{os_version}/{os_version}{os_sub_version_max}-{os_sub_version_min}_{os_bit}/vmlinuz initrd=initrd.img ramdisk_size=8192 dd=http://{ipaddress_dhcp}/driver/kmod-mpt3sas-24.00.00.00_el{os_sub_version_max}.{os_sub_version_min}-1.x86_64.rpm ip=dhcp ks=http://{ipaddress_dhcp}/ks/ks_all/{mac_net_pxe}.cfg ksdevice={mac_boot_device_rhel6}".format(
+                    "kernel http://{ipaddress_dhcp}/images-uefi/{os_version}/{os_version}{os_sub_version_max}-{os_sub_version_min}_{os_bit}/vmlinuz initrd=initrd.img ramdisk_size=8192 dd=http://{ipaddress_dhcp}/driver/mpt3sas-24.00.00.00_el{os_sub_version_max}.{os_sub_version_min}-1.x86_64.iso/dd.iso ip=dhcp ks=http://{ipaddress_dhcp}/ks/ks_all/{mac_net_pxe}.cfg ksdevice={mac_boot_device_rhel6}".format(
                         os_version=os_version_sub, os_sub_version_max=os_sub_version_max_sub,
                         os_sub_version_min=os_sub_version_min_sub, os_bit=os_bit_sub, ipaddress_dhcp=ipaddress_dhcp_sub,
                         mac_net_pxe=mac_net_pxe_sub, mac_boot_device_rhel6=mac_boot_device_rhel6_sub) + os.linesep)
